@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Project - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #9EA49C;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #4B504A;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            border: 2px dashed #9EA49C;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9EA49C;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .container {
+            flex: 1;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .welcome-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(75, 80, 74, 0.15);
+            margin-bottom: 30px;
+            border: 1px solid #528049;
+        }
+
+        .welcome-section h2 {
+            color: #4B504A;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .welcome-section p {
+            color: #528049;
+            font-size: 1.1em;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(75, 80, 74, 0.1);
+            border: 1px solid #9EA49C;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(75, 80, 74, 0.15);
+        }
+
+        .dashboard-card h3 {
+            color: #4B504A;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #528049;
+            padding-bottom: 8px;
+        }
+
+        .dashboard-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .logout-btn {
+            background-color: #264F1B;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #1a3614;
+        }
+
+        footer {
+            background-color: #4B504A;
+            color: #9EA49C;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo-placeholder">LOGO</div>
+            <h1>HR Project</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h2>Welcome to HR Dashboard!</h2>
+            <p>Login successful! You can now access the HR management features.</p>
+            <a href="{{ url_for('login') }}" class="logout-btn">Logout</a>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3>Employee Management</h3>
+                <p>Manage employee records, personal information, and organizational hierarchy.</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Attendance Tracking</h3>
+                <p>Monitor employee attendance, time logs, and generate attendance reports.</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Payroll Management</h3>
+                <p>Process payroll, manage salary structures, and handle compensation data.</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Performance Reviews</h3>
+                <p>Conduct performance evaluations, set goals, and track employee progress.</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Recruitment</h3>
+                <p>Manage job postings, candidate applications, and interview scheduling.</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Reports & Analytics</h3>
+                <p>Generate comprehensive HR reports and analyze workforce data.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 HR Project. All rights reserved.</p>
+    </footer>
+</body>
+</html>
