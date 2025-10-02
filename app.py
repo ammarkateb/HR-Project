@@ -4,6 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'hr_project_secret_key'
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # Create necessary directories
 os.makedirs('templates', exist_ok=True)
@@ -12,7 +13,8 @@ os.makedirs('assets', exist_ok=True)
 
 @app.route('/')
 def login():
-    return render_template('login.html')
+    response = render_template('login.html')
+    return response
 
 @app.route('/login', methods=['POST'])
 def handle_login():
