@@ -65,6 +65,44 @@ def api_login():
             'message': 'Please fill in both fields'
         }), 400
 
+@app.route('/api/signup', methods=['POST'])
+def api_signup():
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not username or not email or not password:
+        return jsonify({
+            'success': False,
+            'message': 'Please fill in all fields'
+        }), 400
+
+    if len(username) < 3:
+        return jsonify({
+            'success': False,
+            'message': 'Username must be at least 3 characters'
+        }), 400
+
+    if '@' not in email:
+        return jsonify({
+            'success': False,
+            'message': 'Please enter a valid email'
+        }), 400
+
+    if len(password) < 6:
+        return jsonify({
+            'success': False,
+            'message': 'Password must be at least 6 characters'
+        }), 400
+
+    # TODO: Add database integration to store user
+    # For now, just return success
+    return jsonify({
+        'success': True,
+        'message': f'Account created successfully! Please log in with your credentials.'
+    }), 201
+
 @app.route('/api/dashboard', methods=['GET'])
 def api_dashboard():
     # Mock dashboard data
