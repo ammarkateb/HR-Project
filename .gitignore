@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Flask
+instance/
+.webassets-cache
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# APK files
+*.apk
+*.aab
+
+# Flutter/Mobile
+hr_project_mobile/build/
+hr_project_mobile/.dart_tool/
+hr_project_mobile/.flutter-plugins
+hr_project_mobile/.flutter-plugins-dependencies
+hr_project_mobile/.packages
+hr_project_mobile/pubspec.lock
+hr_project_mobile/ios/Pods/
+hr_project_mobile/ios/.symlinks/
+hr_project_mobile/android/.gradle/
+hr_project_mobile/android/app/*.iml
+hr_project_mobile/android/local.properties
+
+# Assets
+assets/*.png
+assets/*.jpg
+assets/*.jpeg
+
+# Logs
+*.log
