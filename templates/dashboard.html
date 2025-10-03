@@ -313,9 +313,9 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="user-info">
-                <div class="user-avatar">U</div>
+                <div class="user-avatar">{{ username[0].upper() if username else 'U' }}</div>
                 <div class="user-details">
-                    <h3>Username</h3>
+                    <h3>{{ username if username else 'Username' }}</h3>
                     <p>Manager</p>
                 </div>
             </div>
@@ -347,9 +347,9 @@
         <div class="content">
             <!-- Welcome Card -->
             <div class="welcome-card">
-                <div class="welcome-avatar">U</div>
+                <div class="welcome-avatar">{{ username[0].upper() if username else 'U' }}</div>
                 <div class="welcome-text">
-                    <h2>Welcome back, Username!</h2>
+                    <h2>Welcome back, {{ username if username else 'Username' }}!</h2>
                     <p>Manager • Connected to your web app</p>
                 </div>
             </div>
@@ -419,38 +419,9 @@
     </div>
 
     <script>
-        // Check if user is logged in
-        window.onload = function() {
-            const loggedIn = sessionStorage.getItem('loggedIn');
-            const username = sessionStorage.getItem('username') || 'User';
-
-            if (!loggedIn) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            // Update username displays
-            document.querySelectorAll('.user-avatar').forEach(el => {
-                el.textContent = username.charAt(0).toUpperCase();
-            });
-
-            document.querySelectorAll('.user-details h3, .welcome-text h2').forEach(el => {
-                if (el.tagName === 'H2') {
-                    el.textContent = 'Welcome back, ' + username + '!';
-                } else {
-                    el.textContent = username;
-                }
-            });
-
-            document.querySelectorAll('.welcome-avatar').forEach(el => {
-                el.textContent = username.charAt(0).toUpperCase();
-            });
-        };
-
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
-                sessionStorage.clear();
-                window.location.href = 'index.html';
+                window.location.href = '/';
             }
         }
 
