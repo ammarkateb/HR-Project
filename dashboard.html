@@ -110,6 +110,7 @@
             margin-left: 260px;
             display: flex;
             flex-direction: column;
+            background: transparent;
         }
 
         /* Header */
@@ -146,17 +147,19 @@
         .content {
             padding: 30px;
             flex: 1;
+            background: transparent;
         }
 
         .welcome-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             margin-bottom: 30px;
             display: flex;
             align-items: center;
             gap: 20px;
+            backdrop-filter: blur(10px);
         }
 
         .welcome-avatar {
@@ -198,12 +201,13 @@
         }
 
         .overview-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             text-align: center;
             transition: transform 0.3s;
+            backdrop-filter: blur(10px);
         }
 
         .overview-card:hover {
@@ -249,10 +253,16 @@
 
         /* Recent Activities */
         .activities-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .activity-item {
