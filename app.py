@@ -1,10 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import os
 from datetime import datetime
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 app = Flask(__name__)
 app.secret_key = 'hr_project_secret_key'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
+# Database configuration
+DATABASE_URL = os.environ.get('DATABASE_URL',
+    'postgresql://postgres.xanpxygpcbbcxejkqloa:ABDULKAREEMABDULRAHMANAMMAR@aws-1-eu-central-1.pooler.supabase.com:6543/postgres')
+
+def get_db_connection():
+    conn = psycopg2.connect(DATABASE_URL)
+    return conn
 
 # Create necessary directories
 os.makedirs('templates', exist_ok=True)
@@ -51,7 +61,7 @@ def add_employee():
         'last_name_en': request.form.get('last_name_en'),
         'employee_number': request.form.get('employee_number'),
         'national_identifier': request.form.get('national_identifier'),
-        'birth_date': request.form.get('birth_date'),
+        'birth_date': request.form.get('birth_date') if request.form.get('birth_date') else None,
         'birth_city': request.form.get('birth_city'),
         'blood_type_id': request.form.get('blood_type_id'),
         'nationality_id': request.form.get('nationality_id'),
@@ -67,10 +77,41 @@ def add_employee():
         flash('National ID must be exactly 10 digits', 'error')
         return render_template('employees.html')
 
-    # TODO: Add database integration to store employee
-    # For now, just return success
-    flash('Employee added successfully!', 'success')
-    return render_template('employees.html')
+    if not employee_data['blood_type_id'] or not employee_data['nationality_id'] or not employee_data['religion_id']:
+        flash('Please select all required fields', 'error')
+        return render_template('employees.html')
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            INSERT INTO persons (
+                first_name_ar, second_name_ar, third_name_ar, last_name_ar,
+                first_name_en, second_name_en, third_name_en, last_name_en,
+                employee_number, national_identifier, birth_date, birth_city,
+                blood_type_id, nationality_id, religion_id
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            employee_data['first_name_ar'], employee_data['second_name_ar'],
+            employee_data['third_name_ar'], employee_data['last_name_ar'],
+            employee_data['first_name_en'], employee_data['second_name_en'],
+            employee_data['third_name_en'], employee_data['last_name_en'],
+            employee_data['employee_number'], employee_data['national_identifier'],
+            employee_data['birth_date'], employee_data['birth_city'],
+            employee_data['blood_type_id'], employee_data['nationality_id'],
+            employee_data['religion_id']
+        ))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        flash('Employee added successfully!', 'success')
+        return render_template('employees.html')
+    except Exception as e:
+        flash(f'Error adding employee: {str(e)}', 'error')
+        return render_template('employees.html')
 
 # API Endpoints for Mobile App
 @app.route('/api/login', methods=['POST'])
@@ -140,10 +181,20 @@ def api_signup():
 
 @app.route('/api/dashboard', methods=['GET'])
 def api_dashboard():
-    # Mock dashboard data
+    # Get real employee count from database
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM persons")
+        employee_count = cur.fetchone()[0]
+        cur.close()
+        conn.close()
+    except:
+        employee_count = 0
+
     dashboard_data = {
         'overview': {
-            'employees': 156,
+            'employees': employee_count,
             'departments': 12,
             'pending_requests': 8,
             'active_projects': 24
