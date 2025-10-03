@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Project - Add Employee</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4B504A, #528049, #264F1B, #528049, #4B504A, #9EA49C);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #4B504A, #528049, #264F1B);
+            color: white;
+            padding: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #528049;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-menu a.active {
+            background-color: rgba(255,255,255,0.2);
+            border-left: 3px solid white;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background-color: rgba(255,255,255,0.1);
+            margin: 10px 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+        }
+
+        /* Header */
+        .header {
+            background-color: #528049;
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+        }
+
+        .header-actions button {
+            background-color: white;
+            color: #528049;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .header-actions button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Content */
+        .content {
+            padding: 30px;
+            flex: 1;
+            background: transparent;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-section-title {
+            color: #000;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #528049;
+        }
+
+        .form-section-title:first-child {
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #000;
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group label.required::after {
+            content: ' *';
+            color: red;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: white;
+            color: #000;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #528049;
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #528049;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            background-color: #264F1B;
+        }
+
+        .submit-btn:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="user-info">
+                <div class="user-avatar">{{ username[0].upper() if username else 'U' }}</div>
+                <div class="user-details">
+                    <h3>{{ username if username else 'Username' }}</h3>
+                    <p>Manager</p>
+                </div>
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
+            <li><a href="#"><span class="menu-icon">🤖</span> Personal Assistant</a></li>
+            <li><a href="#"><span class="menu-icon">📅</span> Timetable</a></li>
+            <li><a href="/employees" class="active"><span class="menu-icon">👥</span> Employees</a></li>
+            <li><a href="#"><span class="menu-icon">🏢</span> Departments</a></li>
+            <li><a href="#"><span class="menu-icon">📋</span> Projects</a></li>
+            <div class="menu-divider"></div>
+            <li><a href="#"><span class="menu-icon">⚙️</span> Settings</a></li>
+            <li><a href="#"><span class="menu-icon">❓</span> Help & Support</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Add New Employee</h1>
+            <div class="header-actions">
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h2 class="section-title">Employee Information</h2>
+
+            <div class="form-card">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('add_employee') }}" method="POST">
+                    <!-- Arabic Name Section -->
+                    <h3 class="form-section-title">Arabic Name</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first_name_ar">First Name (AR)</label>
+                            <input type="text" id="first_name_ar" name="first_name_ar" placeholder="الاسم الأول">
+                        </div>
+                        <div class="form-group">
+                            <label for="second_name_ar">Second Name (AR)</label>
+                            <input type="text" id="second_name_ar" name="second_name_ar" placeholder="الاسم الثاني">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="third_name_ar">Third Name (AR)</label>
+                            <input type="text" id="third_name_ar" name="third_name_ar" placeholder="الاسم الثالث">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name_ar">Last Name (AR)</label>
+                            <input type="text" id="last_name_ar" name="last_name_ar" placeholder="اسم العائلة">
+                        </div>
+                    </div>
+
+                    <!-- English Name Section -->
+                    <h3 class="form-section-title">English Name</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first_name_en">First Name (EN)</label>
+                            <input type="text" id="first_name_en" name="first_name_en" placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="second_name_en">Second Name (EN)</label>
+                            <input type="text" id="second_name_en" name="second_name_en" placeholder="Second Name">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="third_name_en">Third Name (EN)</label>
+                            <input type="text" id="third_name_en" name="third_name_en" placeholder="Third Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name_en">Last Name (EN)</label>
+                            <input type="text" id="last_name_en" name="last_name_en" placeholder="Last Name">
+                        </div>
+                    </div>
+
+                    <!-- Employee Details Section -->
+                    <h3 class="form-section-title">Employee Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="employee_number" class="required">Employee Number</label>
+                            <input type="text" id="employee_number" name="employee_number" placeholder="10 digits" maxlength="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="national_identifier" class="required">National ID</label>
+                            <input type="text" id="national_identifier" name="national_identifier" placeholder="10 digits" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="birth_date">Birth Date</label>
+                            <input type="date" id="birth_date" name="birth_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="birth_city">Birth City</label>
+                            <input type="text" id="birth_city" name="birth_city" placeholder="City of birth">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="blood_type_id" class="required">Blood Type</label>
+                            <select id="blood_type_id" name="blood_type_id" required>
+                                <option value="">Select Blood Type</option>
+                                <option value="1">A+</option>
+                                <option value="2">A-</option>
+                                <option value="3">B+</option>
+                                <option value="4">B-</option>
+                                <option value="5">O+</option>
+                                <option value="6">O-</option>
+                                <option value="7">AB+</option>
+                                <option value="8">AB-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality_id" class="required">Nationality</label>
+                            <select id="nationality_id" name="nationality_id" required>
+                                <option value="">Select Nationality</option>
+                                <option value="1">Saudi Arabian</option>
+                                <option value="2">Egyptian</option>
+                                <option value="3">Jordanian</option>
+                                <option value="4">Lebanese</option>
+                                <option value="5">Syrian</option>
+                                <option value="6">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="religion_id" class="required">Religion</label>
+                            <select id="religion_id" name="religion_id" required>
+                                <option value="">Select Religion</option>
+                                <option value="1">Islam</option>
+                                <option value="2">Christianity</option>
+                                <option value="3">Judaism</option>
+                                <option value="4">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Add Employee</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/';
+            }
+        }
+
+        // Add click handlers to sidebar menu items
+        document.querySelectorAll('.sidebar-menu a:not(.active)').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.href.includes('dashboard') && !this.href.includes('employees')) {
+                    e.preventDefault();
+                    alert(this.textContent.trim() + ' - Coming Soon');
+                }
+            });
+        });
+
+        // Validate number inputs
+        document.getElementById('employee_number').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        document.getElementById('national_identifier').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    </script>
+</body>
+</html>

@@ -176,12 +176,13 @@
         }
 
         .welcome-text h2 {
-            color: #4B504A;
+            color: #000;
             margin-bottom: 5px;
+            font-weight: 600;
         }
 
         .welcome-text p {
-            color: #666;
+            color: #333;
             font-size: 14px;
         }
 
@@ -231,22 +232,19 @@
             margin-bottom: 10px;
         }
 
-        .overview-card.green .overview-icon { color: #528049; }
-        .overview-card.dark-green .overview-icon { color: #264F1B; }
-        .overview-card.gray .overview-icon { color: #4B504A; }
+        .overview-icon {
+            color: #000;
+        }
 
         .overview-count {
             font-size: 2em;
             font-weight: bold;
             margin-bottom: 5px;
+            color: #000;
         }
 
-        .overview-card.green .overview-count { color: #528049; }
-        .overview-card.dark-green .overview-count { color: #264F1B; }
-        .overview-card.gray .overview-count { color: #4B504A; }
-
         .overview-title {
-            color: #666;
+            color: #333;
             font-size: 14px;
             font-weight: 500;
         }
@@ -262,7 +260,7 @@
 
         .section-title {
             color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .activity-item {
@@ -280,12 +278,12 @@
         .activity-icon {
             width: 40px;
             height: 40px;
-            background-color: rgba(82, 128, 73, 0.1);
+            background-color: rgba(0, 0, 0, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #528049;
+            color: #000;
         }
 
         .activity-details {
@@ -293,17 +291,18 @@
         }
 
         .activity-details h4 {
-            color: #4B504A;
+            color: #000;
             margin-bottom: 5px;
+            font-weight: 600;
         }
 
         .activity-details p {
-            color: #666;
+            color: #333;
             font-size: 14px;
         }
 
         .activity-time {
-            color: #999;
+            color: #666;
             font-size: 12px;
         }
     </style>
@@ -321,10 +320,10 @@
             </div>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#" class="active"><span class="menu-icon">📊</span> Dashboard</a></li>
+            <li><a href="/dashboard" class="active"><span class="menu-icon">📊</span> Dashboard</a></li>
             <li><a href="#"><span class="menu-icon">🤖</span> Personal Assistant</a></li>
             <li><a href="#"><span class="menu-icon">📅</span> Timetable</a></li>
-            <li><a href="#"><span class="menu-icon">👥</span> Employees</a></li>
+            <li><a href="/employees"><span class="menu-icon">👥</span> Employees</a></li>
             <li><a href="#"><span class="menu-icon">🏢</span> Departments</a></li>
             <li><a href="#"><span class="menu-icon">📋</span> Projects</a></li>
             <div class="menu-divider"></div>
@@ -428,7 +427,7 @@
         // Add click handlers to sidebar menu items
         document.querySelectorAll('.sidebar-menu a').forEach(link => {
             link.addEventListener('click', function(e) {
-                if (!this.classList.contains('active')) {
+                if (!this.classList.contains('active') && !this.href.includes('employees')) {
                     e.preventDefault();
                     alert(this.textContent.trim() + ' - Coming Soon');
                 }

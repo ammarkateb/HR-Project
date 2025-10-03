@@ -33,6 +33,45 @@ def handle_login():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/employees')
+def employees():
+    return render_template('employees.html')
+
+@app.route('/add_employee', methods=['POST'])
+def add_employee():
+    # Get form data
+    employee_data = {
+        'first_name_ar': request.form.get('first_name_ar'),
+        'second_name_ar': request.form.get('second_name_ar'),
+        'third_name_ar': request.form.get('third_name_ar'),
+        'last_name_ar': request.form.get('last_name_ar'),
+        'first_name_en': request.form.get('first_name_en'),
+        'second_name_en': request.form.get('second_name_en'),
+        'third_name_en': request.form.get('third_name_en'),
+        'last_name_en': request.form.get('last_name_en'),
+        'employee_number': request.form.get('employee_number'),
+        'national_identifier': request.form.get('national_identifier'),
+        'birth_date': request.form.get('birth_date'),
+        'birth_city': request.form.get('birth_city'),
+        'blood_type_id': request.form.get('blood_type_id'),
+        'nationality_id': request.form.get('nationality_id'),
+        'religion_id': request.form.get('religion_id'),
+    }
+
+    # Validate required fields
+    if not employee_data['employee_number'] or len(employee_data['employee_number']) != 10:
+        flash('Employee number must be exactly 10 digits', 'error')
+        return render_template('employees.html')
+
+    if not employee_data['national_identifier'] or len(employee_data['national_identifier']) != 10:
+        flash('National ID must be exactly 10 digits', 'error')
+        return render_template('employees.html')
+
+    # TODO: Add database integration to store employee
+    # For now, just return success
+    flash('Employee added successfully!', 'success')
+    return render_template('employees.html')
+
 # API Endpoints for Mobile App
 @app.route('/api/login', methods=['POST'])
 def api_login():
