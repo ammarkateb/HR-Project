@@ -288,8 +288,7 @@
             <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
             <li><a href="#"><span class="menu-icon">🤖</span> Personal Assistant</a></li>
             <li><a href="#"><span class="menu-icon">📅</span> Timetable</a></li>
-            <li><a href="/employees" class="active"><span class="menu-icon">➕</span> Add Employee</a></li>
-            <li><a href="/manage_employees"><span class="menu-icon">👥</span> Manage Employees</a></li>
+            <li><a href="/employees" class="active"><span class="menu-icon">👥</span> Employees</a></li>
             <li><a href="#"><span class="menu-icon">🏢</span> Departments</a></li>
             <li><a href="#"><span class="menu-icon">📋</span> Projects</a></li>
             <div class="menu-divider"></div>
@@ -302,15 +301,16 @@
     <div class="main-content">
         <!-- Header -->
         <div class="header">
-            <h1>Add New Employee</h1>
+            <h1>Edit Employee</h1>
             <div class="header-actions">
+                <a href="/manage_employees" style="background-color: white; color: #528049; padding: 10px 20px; border-radius: 6px; text-decoration: none; margin-right: 10px;">Back to List</a>
                 <button onclick="logout()">Logout</button>
             </div>
         </div>
 
         <!-- Content -->
         <div class="content">
-            <h2 class="section-title">Employee Information</h2>
+            <h2 class="section-title">Update Employee Information</h2>
 
             <div class="form-card">
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -321,27 +321,27 @@
                     {% endif %}
                 {% endwith %}
 
-                <form action="{{ url_for('add_employee') }}" method="POST">
+                <form action="{{ url_for('update_employee', person_id=employee.person_id) }}" method="POST">
                     <!-- Arabic Name Section -->
                     <h3 class="form-section-title">Arabic Name</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="first_name_ar">First Name (AR)</label>
-                            <input type="text" id="first_name_ar" name="first_name_ar" placeholder="الاسم الأول">
+                            <input type="text" id="first_name_ar" name="first_name_ar" placeholder="الاسم الأول" value="{{ employee.first_name_ar if employee.first_name_ar else '' }}">
                         </div>
                         <div class="form-group">
                             <label for="second_name_ar">Second Name (AR)</label>
-                            <input type="text" id="second_name_ar" name="second_name_ar" placeholder="الاسم الثاني">
+                            <input type="text" id="second_name_ar" name="second_name_ar" placeholder="الاسم الثاني" value="{{ employee.second_name_ar if employee.second_name_ar else '' }}">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="third_name_ar">Third Name (AR)</label>
-                            <input type="text" id="third_name_ar" name="third_name_ar" placeholder="الاسم الثالث">
+                            <input type="text" id="third_name_ar" name="third_name_ar" placeholder="الاسم الثالث" value="{{ employee.third_name_ar if employee.third_name_ar else '' }}">
                         </div>
                         <div class="form-group">
                             <label for="last_name_ar">Last Name (AR)</label>
-                            <input type="text" id="last_name_ar" name="last_name_ar" placeholder="اسم العائلة">
+                            <input type="text" id="last_name_ar" name="last_name_ar" placeholder="اسم العائلة" value="{{ employee.last_name_ar if employee.last_name_ar else '' }}">
                         </div>
                     </div>
 
@@ -350,21 +350,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="first_name_en">First Name (EN)</label>
-                            <input type="text" id="first_name_en" name="first_name_en" placeholder="First Name">
+                            <input type="text" id="first_name_en" name="first_name_en" placeholder="First Name" value="{{ employee.first_name_en if employee.first_name_en else '' }}">
                         </div>
                         <div class="form-group">
                             <label for="second_name_en">Second Name (EN)</label>
-                            <input type="text" id="second_name_en" name="second_name_en" placeholder="Second Name">
+                            <input type="text" id="second_name_en" name="second_name_en" placeholder="Second Name" value="{{ employee.second_name_en if employee.second_name_en else '' }}">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="third_name_en">Third Name (EN)</label>
-                            <input type="text" id="third_name_en" name="third_name_en" placeholder="Third Name">
+                            <input type="text" id="third_name_en" name="third_name_en" placeholder="Third Name" value="{{ employee.third_name_en if employee.third_name_en else '' }}">
                         </div>
                         <div class="form-group">
                             <label for="last_name_en">Last Name (EN)</label>
-                            <input type="text" id="last_name_en" name="last_name_en" placeholder="Last Name">
+                            <input type="text" id="last_name_en" name="last_name_en" placeholder="Last Name" value="{{ employee.last_name_en if employee.last_name_en else '' }}">
                         </div>
                     </div>
 
@@ -373,21 +373,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="employee_number" class="required">Employee Number</label>
-                            <input type="text" id="employee_number" name="employee_number" placeholder="10 digits" maxlength="10" required>
+                            <input type="text" id="employee_number" name="employee_number" placeholder="10 digits" maxlength="10" value="{{ employee.employee_number }}" required>
                         </div>
                         <div class="form-group">
                             <label for="national_identifier" class="required">National ID</label>
-                            <input type="text" id="national_identifier" name="national_identifier" placeholder="10 digits" maxlength="10" required>
+                            <input type="text" id="national_identifier" name="national_identifier" placeholder="10 digits" maxlength="10" value="{{ employee.national_identifier }}" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="birth_date">Birth Date</label>
-                            <input type="date" id="birth_date" name="birth_date">
+                            <input type="date" id="birth_date" name="birth_date" value="{{ employee.birth_date if employee.birth_date else '' }}">
                         </div>
                         <div class="form-group">
                             <label for="birth_city">Birth City</label>
-                            <input type="text" id="birth_city" name="birth_city" placeholder="City of birth">
+                            <input type="text" id="birth_city" name="birth_city" placeholder="City of birth" value="{{ employee.birth_city if employee.birth_city else '' }}">
                         </div>
                     </div>
                     <div class="form-row">
@@ -395,26 +395,26 @@
                             <label for="blood_type_id" class="required">Blood Type</label>
                             <select id="blood_type_id" name="blood_type_id" required>
                                 <option value="">Select Blood Type</option>
-                                <option value="1">A+</option>
-                                <option value="2">A-</option>
-                                <option value="3">B+</option>
-                                <option value="4">B-</option>
-                                <option value="5">O+</option>
-                                <option value="6">O-</option>
-                                <option value="7">AB+</option>
-                                <option value="8">AB-</option>
+                                <option value="1" {% if employee.blood_type_id == 1 %}selected{% endif %}>A+</option>
+                                <option value="2" {% if employee.blood_type_id == 2 %}selected{% endif %}>A-</option>
+                                <option value="3" {% if employee.blood_type_id == 3 %}selected{% endif %}>B+</option>
+                                <option value="4" {% if employee.blood_type_id == 4 %}selected{% endif %}>B-</option>
+                                <option value="5" {% if employee.blood_type_id == 5 %}selected{% endif %}>O+</option>
+                                <option value="6" {% if employee.blood_type_id == 6 %}selected{% endif %}>O-</option>
+                                <option value="7" {% if employee.blood_type_id == 7 %}selected{% endif %}>AB+</option>
+                                <option value="8" {% if employee.blood_type_id == 8 %}selected{% endif %}>AB-</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="nationality_id" class="required">Nationality</label>
                             <select id="nationality_id" name="nationality_id" required>
                                 <option value="">Select Nationality</option>
-                                <option value="1">Saudi Arabian</option>
-                                <option value="2">Egyptian</option>
-                                <option value="3">Jordanian</option>
-                                <option value="4">Lebanese</option>
-                                <option value="5">Syrian</option>
-                                <option value="6">Other</option>
+                                <option value="1" {% if employee.nationality_id == 1 %}selected{% endif %}>Saudi Arabian</option>
+                                <option value="2" {% if employee.nationality_id == 2 %}selected{% endif %}>Egyptian</option>
+                                <option value="3" {% if employee.nationality_id == 3 %}selected{% endif %}>Jordanian</option>
+                                <option value="4" {% if employee.nationality_id == 4 %}selected{% endif %}>Lebanese</option>
+                                <option value="5" {% if employee.nationality_id == 5 %}selected{% endif %}>Syrian</option>
+                                <option value="6" {% if employee.nationality_id == 6 %}selected{% endif %}>Other</option>
                             </select>
                         </div>
                     </div>
@@ -423,15 +423,15 @@
                             <label for="religion_id" class="required">Religion</label>
                             <select id="religion_id" name="religion_id" required>
                                 <option value="">Select Religion</option>
-                                <option value="1">Islam</option>
-                                <option value="2">Christianity</option>
-                                <option value="3">Judaism</option>
-                                <option value="4">Other</option>
+                                <option value="1" {% if employee.religion_id == 1 %}selected{% endif %}>Islam</option>
+                                <option value="2" {% if employee.religion_id == 2 %}selected{% endif %}>Christianity</option>
+                                <option value="3" {% if employee.religion_id == 3 %}selected{% endif %}>Judaism</option>
+                                <option value="4" {% if employee.religion_id == 4 %}selected{% endif %}>Other</option>
                             </select>
                         </div>
                     </div>
 
-                    <button type="submit" class="submit-btn">Add Employee</button>
+                    <button type="submit" class="submit-btn">Update Employee</button>
                 </form>
             </div>
         </div>
@@ -447,7 +447,7 @@
         // Add click handlers to sidebar menu items
         document.querySelectorAll('.sidebar-menu a:not(.active)').forEach(link => {
             link.addEventListener('click', function(e) {
-                if (!this.href.includes('dashboard') && !this.href.includes('employees') && !this.href.includes('manage_employees')) {
+                if (!this.href.includes('dashboard') && !this.href.includes('employees')) {
                     e.preventDefault();
                     alert(this.textContent.trim() + ' - Coming Soon');
                 }

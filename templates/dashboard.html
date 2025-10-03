@@ -323,7 +323,8 @@
             <li><a href="/dashboard" class="active"><span class="menu-icon">📊</span> Dashboard</a></li>
             <li><a href="#"><span class="menu-icon">🤖</span> Personal Assistant</a></li>
             <li><a href="#"><span class="menu-icon">📅</span> Timetable</a></li>
-            <li><a href="/employees"><span class="menu-icon">👥</span> Employees</a></li>
+            <li><a href="/employees"><span class="menu-icon">➕</span> Add Employee</a></li>
+            <li><a href="/manage_employees"><span class="menu-icon">👥</span> Manage Employees</a></li>
             <li><a href="#"><span class="menu-icon">🏢</span> Departments</a></li>
             <li><a href="#"><span class="menu-icon">📋</span> Projects</a></li>
             <div class="menu-divider"></div>
@@ -427,7 +428,7 @@
         // Add click handlers to sidebar menu items
         document.querySelectorAll('.sidebar-menu a').forEach(link => {
             link.addEventListener('click', function(e) {
-                if (!this.classList.contains('active') && !this.href.includes('employees')) {
+                if (!this.classList.contains('active') && !this.href.includes('employees') && !this.href.includes('manage_employees')) {
                     e.preventDefault();
                     alert(this.textContent.trim() + ' - Coming Soon');
                 }

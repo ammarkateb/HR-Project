@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Project - Manage Employees</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4B504A, #528049, #264F1B, #528049, #4B504A, #9EA49C);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #4B504A, #528049, #264F1B);
+            color: white;
+            padding: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #528049;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-menu a.active {
+            background-color: rgba(255,255,255,0.2);
+            border-left: 3px solid white;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background-color: rgba(255,255,255,0.1);
+            margin: 10px 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+        }
+
+        /* Header */
+        .header {
+            background-color: #528049;
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-actions button, .header-actions a {
+            background-color: white;
+            color: #528049;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header-actions button:hover, .header-actions a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Content */
+        .content {
+            padding: 30px;
+            flex: 1;
+            background: transparent;
+        }
+
+        .section-title {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .search-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-form input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #9EA49C;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-form input:focus {
+            outline: none;
+            border-color: #528049;
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background-color: #528049;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-btn:hover {
+            background-color: #264F1B;
+        }
+
+        .table-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #528049;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #4B504A;
+        }
+
+        tr:hover {
+            background-color: rgba(82, 128, 73, 0.1);
+        }
+
+        .edit-btn {
+            background-color: #528049;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .edit-btn:hover {
+            background-color: #264F1B;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: rgba(82, 128, 73, 0.2);
+            color: #264F1B;
+            border: 1px solid #528049;
+        }
+
+        .alert-error {
+            background-color: rgba(158, 164, 156, 0.3);
+            color: #4B504A;
+            border: 1px solid #9EA49C;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #4B504A;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="user-info">
+                <div class="user-avatar">{{ username[0].upper() if username else 'U' }}</div>
+                <div class="user-details">
+                    <h3>{{ username if username else 'Username' }}</h3>
+                    <p>Manager</p>
+                </div>
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/dashboard"><span class="menu-icon">📊</span> Dashboard</a></li>
+            <li><a href="#"><span class="menu-icon">🤖</span> Personal Assistant</a></li>
+            <li><a href="#"><span class="menu-icon">📅</span> Timetable</a></li>
+            <li><a href="/employees"><span class="menu-icon">➕</span> Add Employee</a></li>
+            <li><a href="/manage_employees" class="active"><span class="menu-icon">👥</span> Manage Employees</a></li>
+            <li><a href="#"><span class="menu-icon">🏢</span> Departments</a></li>
+            <li><a href="#"><span class="menu-icon">📋</span> Projects</a></li>
+            <div class="menu-divider"></div>
+            <li><a href="#"><span class="menu-icon">⚙️</span> Settings</a></li>
+            <li><a href="#"><span class="menu-icon">❓</span> Help & Support</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Manage Employees</h1>
+            <div class="header-actions">
+                <a href="/employees">Add New Employee</a>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h2 class="section-title">Search & Update Employees</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Search Box -->
+            <div class="search-card">
+                <form action="/manage_employees" method="GET" class="search-form">
+                    <input type="text" name="search" placeholder="Search by name or employee number..." value="{{ search }}">
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
+            </div>
+
+            <!-- Employees Table -->
+            <div class="table-card">
+                {% if employees %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee #</th>
+                            <th>Name (EN)</th>
+                            <th>Name (AR)</th>
+                            <th>National ID</th>
+                            <th>Birth Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                        <tr>
+                            <td>{{ employee.employee_number }}</td>
+                            <td>{{ employee.first_name_en }} {{ employee.last_name_en }}</td>
+                            <td>{{ employee.first_name_ar }} {{ employee.last_name_ar }}</td>
+                            <td>{{ employee.national_identifier }}</td>
+                            <td>{{ employee.birth_date if employee.birth_date else 'N/A' }}</td>
+                            <td>
+                                <a href="/edit_employee/{{ employee.person_id }}" class="edit-btn">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="no-data">
+                    <p>No employees found. {% if search %}Try a different search term.{% else %}Add your first employee!{% endif %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/';
+            }
+        }
+
+        // Add click handlers to sidebar menu items
+        document.querySelectorAll('.sidebar-menu a:not(.active)').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.href.includes('dashboard') && !this.href.includes('employees') && !this.href.includes('manage_employees')) {
+                    e.preventDefault();
+                    alert(this.textContent.trim() + ' - Coming Soon');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

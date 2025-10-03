@@ -47,6 +47,111 @@ def dashboard():
 def employees():
     return render_template('employees.html')
 
+@app.route('/manage_employees')
+def manage_employees():
+    search = request.args.get('search', '')
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+
+        if search:
+            cur.execute("""
+                SELECT * FROM persons
+                WHERE first_name_en ILIKE %s OR last_name_en ILIKE %s
+                OR first_name_ar ILIKE %s OR last_name_ar ILIKE %s
+                OR employee_number ILIKE %s
+                ORDER BY person_id DESC
+            """, (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%'))
+        else:
+            cur.execute("SELECT * FROM persons ORDER BY person_id DESC")
+
+        employees = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('manage_employees.html', employees=employees, search=search)
+    except Exception as e:
+        flash(f'Error loading employees: {str(e)}', 'error')
+        return render_template('manage_employees.html', employees=[], search=search)
+
+@app.route('/edit_employee/<int:person_id>')
+def edit_employee(person_id):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute("SELECT * FROM persons WHERE person_id = %s", (person_id,))
+        employee = cur.fetchone()
+        cur.close()
+        conn.close()
+
+        if not employee:
+            flash('Employee not found', 'error')
+            return redirect(url_for('manage_employees'))
+
+        return render_template('edit_employee.html', employee=employee)
+    except Exception as e:
+        flash(f'Error loading employee: {str(e)}', 'error')
+        return redirect(url_for('manage_employees'))
+
+@app.route('/update_employee/<int:person_id>', methods=['POST'])
+def update_employee(person_id):
+    employee_data = {
+        'first_name_ar': request.form.get('first_name_ar'),
+        'second_name_ar': request.form.get('second_name_ar'),
+        'third_name_ar': request.form.get('third_name_ar'),
+        'last_name_ar': request.form.get('last_name_ar'),
+        'first_name_en': request.form.get('first_name_en'),
+        'second_name_en': request.form.get('second_name_en'),
+        'third_name_en': request.form.get('third_name_en'),
+        'last_name_en': request.form.get('last_name_en'),
+        'employee_number': request.form.get('employee_number'),
+        'national_identifier': request.form.get('national_identifier'),
+        'birth_date': request.form.get('birth_date') if request.form.get('birth_date') else None,
+        'birth_city': request.form.get('birth_city'),
+        'blood_type_id': request.form.get('blood_type_id'),
+        'nationality_id': request.form.get('nationality_id'),
+        'religion_id': request.form.get('religion_id'),
+    }
+
+    if not employee_data['employee_number'] or len(employee_data['employee_number']) != 10:
+        flash('Employee number must be exactly 10 digits', 'error')
+        return redirect(url_for('edit_employee', person_id=person_id))
+
+    if not employee_data['national_identifier'] or len(employee_data['national_identifier']) != 10:
+        flash('National ID must be exactly 10 digits', 'error')
+        return redirect(url_for('edit_employee', person_id=person_id))
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            UPDATE persons SET
+                first_name_ar=%s, second_name_ar=%s, third_name_ar=%s, last_name_ar=%s,
+                first_name_en=%s, second_name_en=%s, third_name_en=%s, last_name_en=%s,
+                employee_number=%s, national_identifier=%s, birth_date=%s, birth_city=%s,
+                blood_type_id=%s, nationality_id=%s, religion_id=%s
+            WHERE person_id=%s
+        """, (
+            employee_data['first_name_ar'], employee_data['second_name_ar'],
+            employee_data['third_name_ar'], employee_data['last_name_ar'],
+            employee_data['first_name_en'], employee_data['second_name_en'],
+            employee_data['third_name_en'], employee_data['last_name_en'],
+            employee_data['employee_number'], employee_data['national_identifier'],
+            employee_data['birth_date'], employee_data['birth_city'],
+            employee_data['blood_type_id'], employee_data['nationality_id'],
+            employee_data['religion_id'], person_id
+        ))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        flash('Employee updated successfully!', 'success')
+        return redirect(url_for('manage_employees'))
+    except Exception as e:
+        flash(f'Error updating employee: {str(e)}', 'error')
+        return redirect(url_for('edit_employee', person_id=person_id))
+
 @app.route('/add_employee', methods=['POST'])
 def add_employee():
     # Get form data
