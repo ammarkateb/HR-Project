@@ -198,6 +198,11 @@
     </footer>
 
     <script>
+        // Clear any previous session data on page load
+        window.onload = function() {
+            sessionStorage.clear();
+        };
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -205,7 +210,9 @@
             const password = document.getElementById('password').value;
 
             if (username && password) {
-                // Redirect to dashboard
+                // Store username in session and redirect
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('loggedIn', 'true');
                 window.location.href = 'dashboard.html';
             } else {
                 alert('Please fill in both username and password.');

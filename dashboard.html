@@ -13,7 +13,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #4B504A, #528049, #264F1B, #528049, #4B504A, #9EA49C);
             display: flex;
             min-height: 100vh;
         }
@@ -409,8 +409,37 @@
     </div>
 
     <script>
+        // Check if user is logged in
+        window.onload = function() {
+            const loggedIn = sessionStorage.getItem('loggedIn');
+            const username = sessionStorage.getItem('username') || 'User';
+
+            if (!loggedIn) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update username displays
+            document.querySelectorAll('.user-avatar').forEach(el => {
+                el.textContent = username.charAt(0).toUpperCase();
+            });
+
+            document.querySelectorAll('.user-details h3, .welcome-text h2').forEach(el => {
+                if (el.tagName === 'H2') {
+                    el.textContent = 'Welcome back, ' + username + '!';
+                } else {
+                    el.textContent = username;
+                }
+            });
+
+            document.querySelectorAll('.welcome-avatar').forEach(el => {
+                el.textContent = username.charAt(0).toUpperCase();
+            });
+        };
+
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
                 window.location.href = 'index.html';
             }
         }
