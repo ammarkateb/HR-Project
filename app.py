@@ -23,12 +23,8 @@ def handle_login():
 
     # Basic validation - you can replace this with actual authentication
     if username and password:
-        if username == 'admin' and password == 'admin123':
-            flash('Login successful!', 'success')
-            return render_template('dashboard.html', username=username)
-        else:
-            flash('Invalid username or password', 'error')
-            return render_template('login.html')
+        # Accept any username/password for now
+        return render_template('dashboard.html', username=username)
     else:
         flash('Please fill in both fields', 'error')
         return render_template('login.html')
